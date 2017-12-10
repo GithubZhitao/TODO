@@ -17,6 +17,13 @@
 
 参考：http://blog.csdn.net/foruok/article/details/32730911
 
+## UI 文件打开方式
+1. 下载安装 qt 5.9
+2. 打开 qt 命令行 for desktop
+3. git clone 项目路径 本地路径
+4. qmlscene main.qml 查看效果
+
+
 ## 控制層:
 
 定义字段:{
