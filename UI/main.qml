@@ -495,7 +495,7 @@ ApplicationWindow {
     Button{
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        text : "<font size='4'>+</font>"
+        text : "+"
         onClicked:null
     }
 
