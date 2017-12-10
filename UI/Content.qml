@@ -55,6 +55,7 @@ import QtQuick.Controls.Styles.Flat 1.0 as Flat
 import QtQuick.Extras 1.4
 import QtQuick.XmlListModel 2.0
 
+
 Item {
     anchors.fill: parent
     property real margin: 8
@@ -78,7 +79,7 @@ Item {
         { name: "紧急事件", component: calendarComponent },
         { name: "今未完成", component: delayButtonComponent },
         { name: "情景", component: dialComponent },
-        { name: "月历", component: inputComponent },
+        { name: "月历", component: dialComponent },
         { name: "已过时", component: pieMenuComponent },
         { name: "垃圾箱", component: progressComponent },
         { name: "消息", component: tableViewComponent },
@@ -90,9 +91,8 @@ Item {
         id: componentLoader
         anchors.fill: parent
         sourceComponent: addBClicked?inputComponent:componentModel[controlData.componentIndex].component
+        //sourceComponent: componentModel[controlData.componentIndex].component
     }
-
-
 
 
 
@@ -270,7 +270,7 @@ Item {
         }
     }
 
-    property Component inputComponent: ScrollView {
+  /*  property Component inputComponent: ScrollView {
         id: scrollView
         horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
         Flickable {
@@ -355,7 +355,7 @@ Item {
                 }
             }
         }
-    }
+    }*/
 
     Component {
         id: tableViewComponent

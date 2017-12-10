@@ -55,6 +55,7 @@ import QtQuick.Controls.Styles.Flat 1.0 as Flat
 import QtQuick.Extras 1.4
 import QtQuick.Extras.Private 1.0
 
+
 ApplicationWindow {
     id: window
     width: 480
@@ -68,7 +69,6 @@ ApplicationWindow {
     readonly property int textMargins: Math.round(32 * Flat.FlatStyle.scaleFactor)
     readonly property int menuMargins: Math.round(13 * Flat.FlatStyle.scaleFactor)
     readonly property int menuWidth: Math.min(window.width, window.height) * 0.75
-
 
     signal addButtonClicked();
 
@@ -504,10 +504,11 @@ ApplicationWindow {
           emit:addButtonClicked();
         }
     }
-    onAddButtonClicked:{
-           console.log("accept the signal !!!!")
-           contentLoader.source=Content.inputComponent
-    }
 
+   onAddButtonClicked: {
+       // 最好以弹窗的形式
+     contentLoader.sourceComponent=Qt.createComponent("InputEvent.qml")
+    //   Qt.createComponent("InputEvent.qml")
+   }
 
 }
