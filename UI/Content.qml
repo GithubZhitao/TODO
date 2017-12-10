@@ -58,6 +58,8 @@ import QtQuick.XmlListModel 2.0
 Item {
     anchors.fill: parent
     property real margin: 8
+    property bool addBClicked: false
+
     Text {
         id: text
         visible: false
@@ -87,8 +89,11 @@ Item {
     Loader {
         id: componentLoader
         anchors.fill: parent
-        sourceComponent: componentModel[controlData.componentIndex].component
+        sourceComponent: addBClicked?inputComponent:componentModel[controlData.componentIndex].component
     }
+
+
+
 
 
 

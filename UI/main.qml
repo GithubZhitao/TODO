@@ -69,6 +69,9 @@ ApplicationWindow {
     readonly property int menuMargins: Math.round(13 * Flat.FlatStyle.scaleFactor)
     readonly property int menuWidth: Math.min(window.width, window.height) * 0.75
 
+
+    signal addButtonClicked();
+
     onCurrentMenuChanged: {
         xBehavior.enabled = true;
         anchorCurrentMenu();
@@ -493,10 +496,18 @@ ApplicationWindow {
     }
 
     Button{
+        id : addButton
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         text : "+"
-        onClicked:null
+        onClicked: {
+          emit:addButtonClicked();
+        }
     }
+    onAddButtonClicked:{
+           console.log("accept the signal !!!!")
+           contentLoader.source=Content.inputComponent
+    }
+
 
 }
