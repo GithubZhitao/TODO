@@ -15,6 +15,8 @@
 
 参考: https://segmentfault.com/a/1190000000667272
 
+参考：http://blog.csdn.net/foruok/article/details/32730911
+
 ## 控制層:
 
 定义字段:{
