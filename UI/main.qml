@@ -66,11 +66,11 @@ ApplicationWindow {
     readonly property bool contentLoaded: contentLoader.item
     readonly property alias anchorItem: controlsMenu
     property int currentMenu: -1
+    property bool focusInput: false
     readonly property int textMargins: Math.round(32 * Flat.FlatStyle.scaleFactor)
     readonly property int menuMargins: Math.round(13 * Flat.FlatStyle.scaleFactor)
     readonly property int menuWidth: Math.min(window.width, window.height) * 0.75
 
-    signal addButtonClicked();
 
     onCurrentMenuChanged: {
         xBehavior.enabled = true;
@@ -341,6 +341,14 @@ ApplicationWindow {
                     z: 1000
                 }
             }
+            Connections{
+             target: contentLoader.item
+             onCastMessage: {
+                 console.log(msg)
+                 window.focusInput=true
+                  console.log("====>"+window.focusInput)
+             }
+            }
         }
 
         Rectangle {
@@ -495,20 +503,5 @@ ApplicationWindow {
         }
     }
 
-    Button{
-        id : addButton
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        text : "+"
-        onClicked: {
-          emit:addButtonClicked();
-        }
-    }
-
-   onAddButtonClicked: {
-       // 最好以弹窗的形式
-     contentLoader.sourceComponent=Qt.createComponent("InputEvent.qml")
-    //   Qt.createComponent("InputEvent.qml")
-   }
 
 }
