@@ -164,7 +164,6 @@ ApplicationWindow {
                 width: parent.width
                 height: toolBar.height
                 color: Flat.FlatStyle.defaultTextColor
-
                 Label {
                     text: "显示方式"
                     font.family: Flat.FlatStyle.fontFamily
@@ -328,6 +327,9 @@ ApplicationWindow {
                 property QtObject controlData: QtObject {
                     readonly property int componentIndex: controlView.currentIndex
                     readonly property int textMargins: window.textMargins
+                    onComponentIndexChanged: {
+                        console.log("component index changed")
+                    }
                 }
 
                 MouseArea {
@@ -341,18 +343,20 @@ ApplicationWindow {
                     z: 1000
                 }
             }
-            Connections{
+
+        /*    Connections{
              target: contentLoader.item
              onCastMessage: {
                  console.log(msg)
                  window.focusInput=true
-                  console.log("====>"+window.focusInput)
+                 console.log("====>"+window.focusInput)
              }
-            }
+            }*/
         }
 
         Rectangle {
             id: settingsMenu
+            enabled: false
             z: contentContainer.z + 1
             width: menuWidth
             height: parent.height

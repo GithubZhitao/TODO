@@ -85,7 +85,7 @@ Item {
         { name: "垃圾箱", component: progressComponent },
         { name: "消息", component: tableViewComponent },
         { name: "帮助", component: textAreaComponent },
-        { name: "Tumbler", component: tumblerComponent }
+        { name: "Tumbler", component: textAreaComponent }
     ]
 
     Loader {
@@ -95,14 +95,12 @@ Item {
         //sourceComponent: componentModel[controlData.componentIndex].component
     }
 
-
-
-
     property Component inputComponent: ScrollView
     {
         id: scrollView
         horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
         Flickable {
+            id: flickComp
             anchors.fill: parent
             contentWidth: viewport.width
             contentHeight: inputcolumn.implicitHeight + textMargins * 1.5
@@ -122,19 +120,20 @@ Item {
                         anchors.fill: parent
                         TextField {
                             z: 1
-                            placeholderText: "TextField"
+                            placeholderText: "事件主题"
                             Layout.fillWidth: true
                         }
                         TextField {
-                            placeholderText: "Password"
+                            placeholderText: "内容简述"
                             echoMode: TextInput.Password // TODO: PasswordEchoOnEdit
                             Layout.fillWidth: true
+                            height: 2*width
                         }
                     }
                 }
 
                 GroupBox {
-                    title: "ComboBox"
+                    title: "级别"
                     checkable: settingsData.checks
                     flat: !settingsData.frames
                     Layout.fillWidth: true
@@ -142,16 +141,12 @@ Item {
                     ColumnLayout {
                         anchors.fill: parent
                         ComboBox {
-                            model: ["Option 1", "Option 2", "Option 3"]
-                            Layout.fillWidth: true
-                        }
-                        ComboBox {
                             editable: true
                             model: ListModel {
                                 id: combomodel
-                                ListElement { text: "Option 1" }
-                                ListElement { text: "Option 2" }
-                                ListElement { text: "Option 3" }
+                                ListElement { text: "一般" }
+                                ListElement { text: "重要" }
+                                ListElement { text: "紧急" }
                             }
                             onAccepted: {
                                 if (find(currentText) === -1) {
@@ -165,25 +160,132 @@ Item {
                 }
 
                 GroupBox {
-                    title: "SpinBox"
+                    title: "日期"
                     checkable: settingsData.checks
                     flat: !settingsData.frames
                     Layout.fillWidth: true
-                    GridLayout {
+                    ColumnLayout {
                         anchors.fill: parent
-                        columns: Math.max(1, Math.floor(scrollView.width / spinbox.implicitWidth - 0.5))
-                        SpinBox {
-                            id: spinbox
-                            Layout.fillWidth: true
+                       // column: Math.max(1, Math.floor(scrollView.width / inputTime.implicitWidth - 0.5))
+
+                        //====================================    data changed
+                        TextField
+                        {
+                            id: calendarStr
+                            property string dateValue
+
+                            Calendar{
+                                id: calendar
+
+                                anchors.topMargin: 0
+                                anchors.top: parent.bottom
+                                visible: false
+                                activeFocusOnTab: true
+                                onReleased: {
+                                    calendarStr.text = date;
+                                    calendarStr.text = calendarStr.text.substr(0, 10);
+                                    parent.dateValue = calendarStr.text;
+                                    visible = false;
+                                }
+                            }
+
+                            Button{
+                                id: downBtn
+                                width: 22
+                                anchors.right: parent.right
+                                anchors.rightMargin: 0
+                                anchors.bottom: parent.bottom
+                                anchors.bottomMargin: 0
+                                anchors.top: parent.top
+                                anchors.topMargin: 0
+                             //   iconSource: "../../images/arrow_down.png"
+                                onClicked: calendar.visible = !calendar.visible
+                            }
+
+                            onDateValueChanged: {
+                                calendarStr.text = dateValue;
+                                calendar.selectedDate = dateValue;
+                            }
+
                         }
-                        SpinBox {
-                            decimals: 1
-                            Layout.fillWidth: true
-                        }
+
+                        //================
+                        Item {
+                            id : inputTime
+                            width: 22
+                            anchors.right: parent.right
+                            anchors.rightMargin: 0.1*inputTime.width
+                            anchors.bottom: parent.bottom
+                            anchors.bottomMargin: 0
+                            anchors.top: parent.top
+                            anchors.topMargin: 0
+                            Tumbler {
+                                    anchors.centerIn: parent
+                                    TumblerColumn {
+                                        model: {
+                                             var hours = [];
+                                             for (var i = 1; i <= 24; ++i)
+                                                     hours.push(i < 10 ? "0" + i : i);
+                                                     hours;
+                                                   }
+                                        }
+                                    TumblerColumn {
+                                       model: {
+                                              var minutes = [];
+                                              for (var i = 0; i < 60; ++i)
+                                                   minutes.push(i < 10 ? "0" + i : i);
+                                                   minutes;
+                                                   }
+                                               }
+                                           }
+                         }
+
+                        //=================
+
+
+
                     }
                 }
-            }
-        }
+
+
+
+
+
+
+
+                GroupBox{
+                  //  title: ""
+                    checkable: settingsData.checks
+                    flat: !settingsData.frames
+                    Layout.fillWidth: true
+                    RowLayout{
+                        id: buttonLayout
+                        anchors.fill: parent
+
+                        // add buttons here  先不用管逻辑了，把功能实现了先
+                        Button{
+                            id : saveButton
+                            text : "保存事件"
+                            onClicked: {
+                                midContent.addBClicked = false
+                            // 获取组件的内容
+                           }
+                         }
+
+                    Button {
+                        id: concelButton
+                        text: "取消编辑"
+                        onClicked:{
+                               midContent.addBClicked = false
+                           //恢复到正常的页面
+                        }
+                    }
+                 }
+
+             }
+         }
+      }
+
     }
 
     property Component textComponet: ScrollView {
@@ -649,6 +751,7 @@ Item {
             }
         }
     }
+   /*
     Component {
         id: tumblerComponent
         Item {
@@ -673,7 +776,7 @@ Item {
                 }
             }
         }
-    }
+    }*/
 
 
     Button{
