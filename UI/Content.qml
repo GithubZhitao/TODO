@@ -47,7 +47,9 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
+import QtQuick 2.8
+import QtQuick.Controls 2.2
+import QtQuick.Controls.Material 2.2
 import QtQuick 2.4
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
@@ -75,7 +77,7 @@ Item {
     readonly property int layoutSpacing: Math.round(5 * Flat.FlatStyle.scaleFactor)
 
     property var componentModel: [
-        { name: "今日安排", component: textComponet },
+        { name: "今日安排", component: eventList },
         { name: "按周显示", component: calendarComponent },
         { name: "紧急事件", component: calendarComponent },
         { name: "今未完成", component: delayButtonComponent },
@@ -112,7 +114,7 @@ Item {
                 enabled: !settingsData.allDisabled
 
                 GroupBox {
-                    title: "TextField"
+                    title: "事件"
                     checkable: settingsData.checks
                     flat: !settingsData.frames
                     Layout.fillWidth: true
@@ -125,7 +127,7 @@ Item {
                         }
                         TextField {
                             placeholderText: "内容简述"
-                            echoMode: TextInput.Password // TODO: PasswordEchoOnEdit
+                           // echoMode: TextInput.Password // TODO: PasswordEchoOnEdit
                             Layout.fillWidth: true
                             height: 2*width
                         }
@@ -249,10 +251,6 @@ Item {
 
 
 
-
-
-
-
                 GroupBox{
                   //  title: ""
                     checkable: settingsData.checks
@@ -324,9 +322,130 @@ Item {
             }
         }
     }
+// add new component
+    property Component eventList: ScrollView{
+        id: scrollView
+        horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
 
+            ListView {
+                id: listView
+                anchors.fill: parent
 
+                delegate: SwipeDelegate {
+                    id: delegate
 
+                    text: modelData
+                    width: parent.width
+
+                    //! [delegate]
+                    swipe.right: Rectangle {
+                        width: parent.width
+                        height: parent.height
+
+                        clip: true
+                        color: SwipeDelegate.pressed ? "#555" : "#666"
+
+                        Label {
+                            font.family: "Fontello"
+                          //  text: delegate.swipe.complete ? "\ue805" // icon-cw-circled
+                          //                                : "\ue801" // icon-cancel-circled-1
+                            text: delegate.swipe.complete ? "<" // icon-cw-circled
+                                                          : "X" // icon-cancel-circled-1
+                            padding: 20
+                            anchors.fill: parent
+                            horizontalAlignment: Qt.AlignRight
+                            verticalAlignment: Qt.AlignVCenter
+
+                            opacity: 2 * -delegate.swipe.position
+
+                            color: Material.color(delegate.swipe.complete ? Material.Green : Material.Red, Material.Shade200)
+                            Behavior on color { ColorAnimation { } }
+                        }
+
+                        Label {
+                            text: qsTr("Removed")
+                            color: "white"
+
+                            padding: 20
+                            anchors.fill: parent
+                            horizontalAlignment: Qt.AlignLeft
+                            verticalAlignment: Qt.AlignVCenter
+
+                            opacity: delegate.swipe.complete ? 1 : 0
+                            Behavior on opacity { NumberAnimation { } }
+                        }
+
+                        SwipeDelegate.onClicked: delegate.swipe.close()
+                        SwipeDelegate.onPressedChanged: undoTimer.stop()
+                    }
+                    //! [delegate]
+
+                    //! [removal]
+                    Timer {
+                        id: undoTimer
+                        interval: 3600
+                        onTriggered: listModel.remove(index)
+                    }
+
+                    swipe.onCompleted: undoTimer.start()
+                    //! [removal]
+                }
+
+                model: ListModel {
+                    id: listModel
+                    ListElement { text: "Lorem ipsum dolor sit amet" }
+                    ListElement { text: "Curabitur sit amet risus" }
+                    ListElement { text: "Suspendisse vehicula nisi" }
+                    ListElement { text: "Mauris imperdiet libero" }
+                    ListElement { text: "Sed vitae dui aliquet augue" }
+                    ListElement { text: "Praesent in elit eu nulla" }
+                    ListElement { text: "Etiam vitae magna" }
+                    ListElement { text: "Pellentesque eget elit euismod" }
+                    ListElement { text: "Nulla at enim porta" }
+                    ListElement { text: "Fusce tincidunt odio" }
+                    ListElement { text: "Ut non ex a ligula molestie" }
+                    ListElement { text: "Nam vitae justo scelerisque" }
+                    ListElement { text: "Vestibulum pulvinar tellus" }
+                    ListElement { text: "Quisque dignissim leo sed gravida" }
+                }
+
+                //! [transitions]
+                remove: Transition {
+                    SequentialAnimation {
+                        PauseAnimation { duration: 125 }
+                        NumberAnimation { property: "height"; to: 0; easing.type: Easing.InOutQuad }
+                    }
+                }
+
+                displaced: Transition {
+                    SequentialAnimation {
+                        PauseAnimation { duration: 125 }
+                        NumberAnimation { property: "y"; easing.type: Easing.InOutQuad }
+                    }
+                }
+                //! [transitions]
+
+                ScrollIndicator.vertical: ScrollIndicator { }
+            }
+
+            Label {
+                id: placeholder
+                text: qsTr("Swipe no more")
+
+                anchors.margins: 60
+                anchors.fill: parent
+
+                opacity: 0.5
+                visible: listView.count === 0
+
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+                wrapMode: Label.WordWrap
+                font.pixelSize: 18
+            }
+
+    }
+// add new component
     property Component progressComponent: ScrollView {
         id: scrollView
         horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
