@@ -17,6 +17,9 @@
 
 参考：http://blog.csdn.net/foruok/article/details/32730911
 
+参考： https://segmentfault.com/a/1190000000667272
+
+
 ## UI 文件打开方式
 1. 下载安装 qt 5.9
 2. 打开 qt 命令行 for desktop
@@ -38,4 +41,10 @@
 ## 模型层:
 数据库增删改查的封装.
 
+
+
+
+扩展阅读
+深入QML引擎
+http://www.jianshu.com/p/3e959cbaff3a
 
