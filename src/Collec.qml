@@ -2,21 +2,21 @@ import QtQuick 2.2
 import QtQuick.Window 2.1
 import "."
 
-Window {
+Item {
     id: window
     visible: true
 
-    //ÕâÀïµÄwidthºÍheightÉèÖÃ£¬²»Ó°ÏìAPPµÄÏÔÊ¾£¬ÒòÎªÔÚQQmlApplicationEngine
-    //Ä¬ÈÏ»áÈÃWindow×î´ó»¯ÏÔÊ¾¡£
-    //ÕâÀïÉèÖÃµÄÖµµÄ»¹ÊÇÓĞÒâÒåµÄ£¬±ÈÈçÍ¨³£ÎÒ»áÔÚ¿ª·¢³õÆÚ£¬±àĞ´UIÊ±£¬
-    //»áÓÃDesktopµÄ¹¹½¨Ì×¼ş£¬Ö±½ÓÔÚ¿ª·¢»·¾³µÄPCÉÏÆô¶¯À´¿´UIµÄĞ§¹û£¬
-    //ÕâÑù±ÈÓÃÉè±¸µ÷ÊÔ¿ì¶àÁË£¬ÕâÖÖ·½·¨»¹ÓĞÁíÒ»¸öºÃ´¦£¬¾ÍÊÇÔÚ±àĞ´
-    //×Ô¶¯ÊÊÓ¦ÆÁÄ»´óĞ¡µÄUIÊ±£¬ÎÒ¿ÉÒÔÖ±½ÓÍÏ¶¯´°¿Ú´óĞ¡À´¿´Ğ§¹û¡£
-    //ËùÒÔÕâÀïµÄwidthºÍheightÖµÉèÖÃÎªÄ¿±êÉè±¸µÄÍ¨ÓÃ·Ö±æÂÊ¡£
+    //è¿™é‡Œçš„widthå’Œheightè®¾ç½®ï¼Œä¸å½±å“APPçš„æ˜¾ç¤ºï¼Œå› ä¸ºåœ¨QQmlApplicationEngine
+    //é»˜è®¤ä¼šè®©Windowæœ€å¤§åŒ–æ˜¾ç¤ºã€‚
+    //è¿™é‡Œè®¾ç½®çš„å€¼çš„è¿˜æ˜¯æœ‰æ„ä¹‰çš„ï¼Œæ¯”å¦‚é€šå¸¸æˆ‘ä¼šåœ¨å¼€å‘åˆæœŸï¼Œç¼–å†™UIæ—¶ï¼Œ
+    //ä¼šç”¨Desktopçš„æ„å»ºå¥—ä»¶ï¼Œç›´æ¥åœ¨å¼€å‘ç¯å¢ƒçš„PCä¸Šå¯åŠ¨æ¥çœ‹UIçš„æ•ˆæœï¼Œ
+    //è¿™æ ·æ¯”ç”¨è®¾å¤‡è°ƒè¯•å¿«å¤šäº†ï¼Œè¿™ç§æ–¹æ³•è¿˜æœ‰å¦ä¸€ä¸ªå¥½å¤„ï¼Œå°±æ˜¯åœ¨ç¼–å†™
+    //è‡ªåŠ¨é€‚åº”å±å¹•å¤§å°çš„UIæ—¶ï¼Œæˆ‘å¯ä»¥ç›´æ¥æ‹–åŠ¨çª—å£å¤§å°æ¥çœ‹æ•ˆæœã€‚
+    //æ‰€ä»¥è¿™é‡Œçš„widthå’Œheightå€¼è®¾ç½®ä¸ºç›®æ ‡è®¾å¤‡çš„é€šç”¨åˆ†è¾¨ç‡ã€‚
     width: 480
     height: 1024
 
-    //±³¾°ÑÕÉ«
+    //èƒŒæ™¯é¢œè‰²
     Rectangle {
         id: backgroundColor
         anchors.fill: parent
@@ -25,7 +25,7 @@ Window {
 	
     Column{
         anchors.fill: parent
-        //±êÌâÀ¸
+        //æ ‡é¢˜æ 
         Titlebar{
             id: titlebar
             onStateChanged: {
@@ -34,13 +34,13 @@ Window {
                 else if(state == "adding")
                     addview.show();
             }
-    }
-        //Ôö¼ÓÊÂÏî
+		}
+        //å¢åŠ äº‹é¡¹
        AddView {
             id: addview
             width: parent.width
             onAdded: {
-                titlebar.state = "default"; //»Ö¸´±êÌâÀ¸µÄ×´Ì¬
+                titlebar.state = "default"; //æ¢å¤æ ‡é¢˜æ çš„çŠ¶æ€
                 if(intent.text !== ""){
                     intent.done = false;
                     list.insertItem(intent);
@@ -48,23 +48,23 @@ Window {
                 }
             }
         }
-        //ÒÑÌí¼ÓµÄÊÂÏîÁĞ±í
+        //å·²æ·»åŠ çš„äº‹é¡¹åˆ—è¡¨
         TodoListView {
             id: list
             width: parent.width
             height: window.height - titlebar.height - addview.height
         }
     }
-    //UI¹¹½¨Íê³Éºó£¬¶ÁÈ¡´ı°ìÊÂÏîÁĞ±í£¬²¢ÏÔÊ¾³öÀ´
+    //UIæ„å»ºå®Œæˆåï¼Œè¯»å–å¾…åŠäº‹é¡¹åˆ—è¡¨ï¼Œå¹¶æ˜¾ç¤ºå‡ºæ¥
     Component.onCompleted: {
-        var l  = todocpp.getItems();
+        var l  = eventscpp.getItems();
         console.debug(JSON.stringify(l));
         for(var i=0; i<l.length; ++i){
             list.insertItem(l[i]);
         }
     }
 	
-    //ÕâÀï¿ÉÒÔ²¶×½AndroidÏµÍ³µÄ·µ»Ø°´¼üÊÂ¼ş£¬Èç¹ûĞèÒª°´Á½´Î·µ»Ø¾ÍÍË³öÈí¼şµÄ»°£¬¿ÉÒÔÔÚÕâÀï×ö
+    //è¿™é‡Œå¯ä»¥æ•æ‰Androidç³»ç»Ÿçš„è¿”å›æŒ‰é”®äº‹ä»¶ï¼Œå¦‚æœéœ€è¦æŒ‰ä¸¤æ¬¡è¿”å›å°±é€€å‡ºè½¯ä»¶çš„è¯ï¼Œå¯ä»¥åœ¨è¿™é‡Œåš
     //    Keys.onReleased: {
     //        if (event.key == Qt.Key_Back) {
     //             event.accepted = true;
